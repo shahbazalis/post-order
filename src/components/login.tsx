@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { login } from "../api";
 import { UserInfo, LooseObject } from "../utility/interface";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setStorageData } from "../utility/sessionStorage";
 
 const emptyObject: LooseObject = {};
 
@@ -10,6 +12,7 @@ const LoginPage = () => {
     values: emptyObject,
   });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // * set the variable value
@@ -42,13 +45,19 @@ const LoginPage = () => {
         email: formState.values.email.toLowerCase(),
       };
       const loginResult = await login(userInfo);
-      if (loginResult) navigate("/posts");
+      if (loginResult) {
+        setStorageData("accessToken", loginResult.data.data.sl_token);
+        navigate("/posts");
+      }
     } catch (error) {
       console.log(error);
     }
   };
   return (
     <div>
+      <div>
+        <h1>Login</h1>
+      </div>
       <form onSubmit={handleSubmit}>
         <label>
           Name
