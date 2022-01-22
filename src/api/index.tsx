@@ -1,6 +1,6 @@
-import axios from "axios";
 import { UserInfo, ErrorInfo } from "../utility/interface";
-import { getStorageData } from "../utility/sessionStorage";
+import { getStorageData,setStorageData } from "../utility/sessionStorage";
+import instance from "../utility/axiosInstance";
 
 const url = "https://api.supermetrics.com/assignment";
 
@@ -11,7 +11,8 @@ export const login = async (userInfo: UserInfo) => {
       name: userInfo.name,
       email: userInfo.email,
     };
-    const loginResult = await axios.post(url + "/register", loginInfo);
+    const loginResult = await instance.post(url + "/register", loginInfo);
+    setStorageData("accessToken", loginResult.data.data.sl_token);
     return loginResult;
   } catch (error) {
     console.log("Login error:", error);
@@ -22,12 +23,12 @@ export const login = async (userInfo: UserInfo) => {
 export const getPosts = async () => {
   try {
     const accessToken = await getStorageData("accessToken");
-    const posts = await axios.get(url + "/posts", {
+    const posts = await instance.get(url + "/posts", {
         params: {
             sl_token: accessToken
         }
       });
-    return posts.data.data;
+    return posts.data.data.posts;
   } catch (error) {
     console.log("Post list error:", error);
     throw error;

@@ -13,5 +13,11 @@ export interface ErrorInfo {
 
 export interface PostsInterface {
   page: number;
-  posts: { id: string; from_name: string; from_id: string; message: string }[];
+  posts: {
+    created_at: string;
+    id: string;
+    from_name: string;
+    from_id: string;
+    message: string;
+  }[];
 }

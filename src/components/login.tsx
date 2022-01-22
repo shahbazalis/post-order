@@ -46,13 +46,14 @@ const LoginPage = () => {
       };
       const loginResult = await login(userInfo);
       if (loginResult) {
-        setStorageData("accessToken", loginResult.data.data.sl_token);
+        setStorageData("userInfo", JSON.stringify(userInfo));
         navigate("/posts");
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <div>
       <div>
