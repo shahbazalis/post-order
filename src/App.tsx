@@ -10,6 +10,7 @@ import AuthReducer from "./redux/reducer";
 const store = createStore(AuthReducer);
 
 const RouteComponent = () => {
+  const isSignout = useSelector((state: any) => state.isSignout);
   return (
     <div>
       <Router>

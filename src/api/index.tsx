@@ -20,12 +20,13 @@ export const login = async (userInfo: UserInfo) => {
   }
 };
 
-export const getPosts = async () => {
+export const getPosts = async (page:number) => {
   try {
     const accessToken = await getStorageData("accessToken");
     const posts = await instance.get(url + "/posts", {
         params: {
-            sl_token: accessToken
+            sl_token: accessToken,
+            page:page
         }
       });
     return posts.data.data.posts;

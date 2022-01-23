@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getStorageData } from "./sessionStorage";
 import { login, getPosts } from "../api/index";
+import { useDispatch } from "react-redux";
 
 const instance = axios.create({
   baseURL: "https://api.supermetrics.com/assignment/",
@@ -20,11 +21,14 @@ instance.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config;
     if (error.response.status === 500 && !originalRequest._retry) {
+      //const dispatch = useDispatch();
       const userInfo = JSON.parse(getStorageData("userInfo")!);
       const loginResult = await login(userInfo);
       if (loginResult) {
         const accessToken = await getStorageData("accessToken");
-        return await getPosts();
+       // dispatch({ type: "SIGN_IN", accessToken: accessToken });
+       const page:any= await getStorageData("page");
+        return await getPosts(page);
       }
     }
   }

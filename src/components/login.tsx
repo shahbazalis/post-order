@@ -3,7 +3,8 @@ import { login } from "../api";
 import { UserInfo, LooseObject } from "../utility/interface";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setStorageData } from "../utility/sessionStorage";
+import { setStorageData,getStorageData } from "../utility/sessionStorage";
+import "./style.css";
 
 const emptyObject: LooseObject = {};
 
@@ -46,6 +47,8 @@ const LoginPage = () => {
       };
       const loginResult = await login(userInfo);
       if (loginResult) {
+        const accessToken = await getStorageData("accessToken");
+        dispatch({ type: "SIGN_IN", accessToken: accessToken });
         setStorageData("userInfo", JSON.stringify(userInfo));
         navigate("/posts");
       }
@@ -55,34 +58,28 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
+    <div className="div">
       <div>
-        <h1>Login</h1>
+        <h1 className="heading-1">Login</h1>
       </div>
       <form onSubmit={handleSubmit}>
-        <label>
-          Name
-          <br />
-          <input
-            type="text"
-            name="name"
-            value={formState.values.name || ""}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <label>
-          Email
-          <br />
-          <input
-            type="email"
-            name="email"
-            value={formState.values.email || ""}
-            onChange={handleChange}
-          />
-        </label>
-        <br />
-        <button>Go</button>
+        <input
+          className="center-block"
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={formState.values.name || ""}
+          onChange={handleChange}
+        />
+        <input
+          className="center-block"
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formState.values.email || ""}
+          onChange={handleChange}
+        />
+        <button className="center-block">Go</button>
       </form>
     </div>
   );
