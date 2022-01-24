@@ -1,35 +1,36 @@
 .heading-1 {
   text-align: center;
 }
-.search-input{
+.search-input {
   padding: 8px 14px;
   margin-left: 60px;
   box-sizing: border-box;
 }
-.first-list{
+.first-list {
   margin-left: 20px;
   width: 15%;
-  float:left
+  float: left;
 }
-.second-list{
+.second-list {
   margin-right: 20px;
   width: 70%;
-  float:right
+  float: right;
 }
 
-.msg-search-input{
+.msg-search-input {
   padding: 8px 14px;
   margin-right: 20px;
-  float:right
+  float: right;
 }
 
 .list-item {
-  padding: 5px 10px;
-  background-color: #EEEEEE;
-  border: 1px solid #DDDDDD;
+  padding: 10px 10px 20px 25px;
+  background-color: #eeeeee;
+  border: 5px solid black;
   margin-bottom: 10px;
+  list-style: none;
 }
-.no-style-list-item{
+.no-style-list-item {
   list-style: none;
   margin-left: 5px;
 }
@@ -41,7 +42,7 @@
   margin-bottom: 10px;
 }
 
-.div{
+.div {
   margin-top: 200px;
   margin-right: auto;
   margin-left: auto;
@@ -51,13 +52,13 @@
 .button {
   display: block;
   margin-top: -40px;
-  margin-left:  auto;
+  margin-left: auto;
   margin-right: 20px;
   margin-bottom: auto;
-  float:right
+  float: right;
 }
 
-.detail-button{
+.detail-button {
   display: block;
   padding-top: 2px;
   margin-top: 0px;
@@ -66,23 +67,32 @@
   margin-bottom: auto;
 }
 
-/* .footer {
-  margin-left: 400px;
-  margin-top: 500px;
-} */
+.avatar {
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  padding: 7px;
+  background-color: grey;
+  float: right;
+  text-align: center;
+}
+.active-list-item{
+  background-color: darkgray;
 
-  .box {
-    position: relative;
-    width: 70%;
-    margin: 0 auto;
-    height: auto;
-    max-height: 70vh;
-    margin-top: calc(100vh - 85vh - 20px);
-    background: #fff;
-    border-radius: 4px;
-    padding: 20px;
-    border: 1px solid #999;
-    overflow: auto;
-  }
-   
- 
+}
+
+.list_item_post_border{
+  border: 5px solid darkgray;
+
+}
+.flex-container {
+  display: flex;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
+}
+.ml15{    margin-right: 15px;}

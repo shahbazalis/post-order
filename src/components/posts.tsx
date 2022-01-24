@@ -1,30 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { getPosts } from "../api";
-import { PostsInterface } from "../utility/interface";
+import {
+  PostInterface,
+  SelectedPostsInterface,
+  SortedPosts,
+  PostDataMap,
+} from "../utility/interface";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { removeStorageData, setStorageData } from "../utility/sessionStorage";
 import moment from "moment";
 
 const Posts = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<SortedPosts[]>([]);
+  const [senderName, setSenderName] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [msgSearchInput, setMsgSearchInput] = useState("");
-  const [selectUserPosts, setSelectUserPosts] = useState<string[]>([]);
+  const [selectUserPosts, setSelectUserPosts] = useState<
+    SelectedPostsInterface[]
+  >([]);
   const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
 
   const postsDetails = async () => {
     try {
       setStorageData("page", page);
-      const posts: any = await getPosts(page);
+      const posts = await getPosts(page);
 
-      const sortedSenderList = posts.sort((a: any, b: any) =>
-        a.from_name.localeCompare(b.from_name)
+      const sortedSenderList = posts.sort(
+        (a: PostInterface, b: PostInterface) =>
+          a.from_name.localeCompare(b.from_name)
       );
 
       const occurrences = await sortedSenderList.reduce(
-        (acc: any, post: any) => {
+        (acc: PostDataMap, post: PostInterface) => {
           if (post.from_id in acc) {
             acc[post.from_id].post.push({
               message: post.message,
@@ -43,13 +52,15 @@ const Posts = () => {
         []
       );
 
-      const occurencesArr: any = Object.keys(occurrences).map(
+      const occurencesArr: SortedPosts[] = Object.keys(occurrences).map(
         (key, index) => occurrences[key]
       );
-
       setPosts(occurencesArr);
-      if (occurencesArr.length > 0)
-        setSelectUserPosts(occurencesArr[0]["post"]);
+
+      if (occurencesArr.length) {
+        setSelectUserPosts(occurencesArr[0].post);
+        setSenderName(occurencesArr[0].from_name);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -75,8 +86,12 @@ const Posts = () => {
     setMsgSearchInput(event.target.value);
   };
 
-  const handleMessageList = (posts: string[]) => {
+  const handlePostList = (
+    posts: SelectedPostsInterface[],
+    senderName: string
+  ) => {
     setSelectUserPosts(posts);
+    setSenderName(senderName);
   };
 
   const handleLogOut = () => {
@@ -86,42 +101,130 @@ const Posts = () => {
     removeStorageData("page");
   };
 
+  const date = (time: string) => {
+    return new Date(time);
+  };
+
   const handleRecentPosts = () => {
-    const sorted = selectUserPosts.sort((x: any, y: any)=> 
-      y.created_time.localeCompare(x.created_time)
+    const rececntPostsArr = [...selectUserPosts].sort(
+      (x: SelectedPostsInterface, y: SelectedPostsInterface) => {
+        let postOne: Date = date(y.created_time);
+        let postTwo: Date = date(x.created_time);
+        let result = postOne.valueOf() - postTwo.valueOf();
+
+        return result;
+      }
     );
-    setSelectUserPosts(sorted);
+    setSelectUserPosts(rececntPostsArr);
   };
 
   const handleOldestPosts = () => {
-    const sorted = selectUserPosts.sort((x: any, y: any)=> 
-    x.created_time.localeCompare(y.created_time)
-  );
-    setSelectUserPosts(sorted);
+    const oldPostsArr = [...selectUserPosts].sort(
+      (x: SelectedPostsInterface, y: SelectedPostsInterface) => {
+        let postOne: Date = date(x.created_time);
+        let postTwo: Date = date(y.created_time);
+
+        let result = postOne.valueOf() - postTwo.valueOf();
+
+        return result;
+      }
+    );
+    setSelectUserPosts(oldPostsArr);
   };
 
   return (
     <div>
       <div>
         <h1 className="heading-1">Post List</h1>
-        <button className="button" onClick={handleLogOut}>
+        <button
+          data-testid="logout-btn"
+          className="button"
+          onClick={handleLogOut}
+        >
           Log Out
         </button>
       </div>
-      <div>
-        <input
-          className="search-input"
-          placeholder="Search"
-          type="text"
-          name="search"
-          value={searchInput || ""}
-          onChange={handleNameSearch}
-        />
+      <div className="grid-container">
+        <div>
+          <input
+            data-testid="search-name"
+            className="search-input"
+            placeholder="Search"
+            type="text"
+            name="search"
+            value={searchInput || ""}
+            onChange={handleNameSearch}
+          />
+        </div>
+        <div>
+          {page === 1 ? (
+            <button
+              data-testid="prv-page-btn"
+              className=" ml15"
+              disabled={true}
+            >
+              Previous Page
+            </button>
+          ) : (
+            <button
+              data-testid="prv-page-btn"
+              className="ml15"
+              onClick={() => setPage(page - 1)}
+            >
+              Previous Page
+            </button>
+          )}
+          {page === 10 ? (
+            <button
+              data-testid="next-page-btn"
+              className="ml15 "
+              disabled={true}
+            >
+              Next Page
+            </button>
+          ) : (
+            <button
+              data-testid="next-page-btn"
+              className="ml15"
+              onClick={() => setPage(page + 1)}
+            >
+              Next Page
+            </button>
+          )}
+        </div>
+        <div>
+          <button
+            data-testid="sort-recent-msg"
+            onClick={() => handleRecentPosts()}
+            className="ml15"
+          >
+            Recent Posts
+          </button>
+          <button
+            data-testid="sort-old-msg"
+            onClick={() => handleOldestPosts()}
+            className="ml15"
+          >
+            Old Posts
+          </button>
+        </div>
+        <div>
+          <input
+            data-testid="search-message"
+            type="text"
+            className="msg-search-input"
+            placeholder="Search"
+            name="search"
+            value={msgSearchInput || ""}
+            onChange={handleMessageSearch}
+          />
+        </div>
       </div>
+
       <div>
         <ul className="first-list">
           {posts
-            .filter((post: any) => {
+            .filter((post: SortedPosts) => {
               if (searchInput === "") return post.from_name;
               else {
                 return post.from_name
@@ -129,35 +232,33 @@ const Posts = () => {
                   .includes(searchInput.toLowerCase());
               }
             })
-            .map((post: any) => {
-              return (
-                <li className="list-item" key={post.from_name}>
-                  {post.from_name} {post.post.length}
-                  <button
-                    className="detail-button"
-                    onClick={() => handleMessageList(post.post)}
-                  >
-                    Check Posts
-                  </button>
+            .map((post: SortedPosts) => {
+              return senderName === post.from_name ? (
+                <li
+                  className="list-item active-list-item"
+                  key={post.from_name}
+                  onClick={() => handlePostList(post.post, post.from_name)}
+                >
+                  {post.from_name}{" "}
+                  <span className="avatar">{post.post.length}</span>
+                </li>
+              ) : (
+                <li
+                  className="list-item"
+                  key={post.from_name}
+                  onClick={() => handlePostList(post.post, post.from_name)}
+                >
+                  {post.from_name}{" "}
+                  <span className="avatar">{post.post.length}</span>
                 </li>
               );
             })}
         </ul>
       </div>
       <div>
-        <input
-          type="text"
-          className="msg-search-input"
-          placeholder="Search"
-          name="search"
-          value={msgSearchInput || ""}
-          onChange={handleMessageSearch}
-        />
         <ul className="second-list">
-          <button onClick={() => handleRecentPosts()}>Recent Posts</button>
-          <button onClick={() => handleOldestPosts()}>Old Posts</button>
           {selectUserPosts
-            .filter((post: any) => {
+            .filter((post: SelectedPostsInterface) => {
               if (msgSearchInput === "") return post;
               else {
                 return post.message
@@ -165,9 +266,9 @@ const Posts = () => {
                   .includes(msgSearchInput.toLowerCase());
               }
             })
-            .map((post: any) => {
+            .map((post: SelectedPostsInterface, index) => {
               return (
-                <li className="list-item">
+                <li className="list-item list_item_post_border" key={index}>
                   {moment(post.created_time).format("MMMM Do YYYY, h:mm:ss a")}{" "}
                   <ul>
                     <li className="no-style-list-item">{post.message}</li>
@@ -176,26 +277,6 @@ const Posts = () => {
               );
             })}
         </ul>
-      </div>
-      <div>
-        {page === 1 ? (
-          <button className="footer" disabled={true}>
-            Previous Page
-          </button>
-        ) : (
-          <button className="footer" onClick={() => setPage(page - 1)}>
-            Previous Page
-          </button>
-        )}
-        {page === 10 ? (
-          <button className="footer" disabled={true}>
-            Next Page
-          </button>
-        ) : (
-          <button className="footer" onClick={() => setPage(page + 1)}>
-            Next Page
-          </button>
-        )}
       </div>
     </div>
   );

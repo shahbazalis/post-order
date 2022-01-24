@@ -3,7 +3,8 @@ import { login } from "../api";
 import { UserInfo, LooseObject } from "../utility/interface";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setStorageData,getStorageData } from "../utility/sessionStorage";
+import { setStorageData, getStorageData } from "../utility/sessionStorage";
+import LoginButton from "./loginBtn";
 import "./style.css";
 
 const emptyObject: LooseObject = {};
@@ -64,6 +65,7 @@ const LoginPage = () => {
       </div>
       <form onSubmit={handleSubmit}>
         <input
+          data-testid="input-name"
           className="center-block"
           type="text"
           name="name"
@@ -72,6 +74,7 @@ const LoginPage = () => {
           onChange={handleChange}
         />
         <input
+          data-testid="input-email"
           className="center-block"
           type="email"
           name="email"
@@ -79,7 +82,7 @@ const LoginPage = () => {
           value={formState.values.email || ""}
           onChange={handleChange}
         />
-        <button className="center-block">Go</button>
+        <LoginButton />
       </form>
     </div>
   );

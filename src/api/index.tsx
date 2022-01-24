@@ -1,4 +1,4 @@
-import { UserInfo, ErrorInfo } from "../utility/interface";
+import { UserInfo} from "../utility/interface";
 import { getStorageData,setStorageData } from "../utility/sessionStorage";
 import instance from "../utility/axiosInstance";
 

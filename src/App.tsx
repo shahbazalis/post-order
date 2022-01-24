@@ -3,14 +3,13 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./components/login";
 import Posts from "./components/posts";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { createStore } from "redux";
 import AuthReducer from "./redux/reducer";
 
 const store = createStore(AuthReducer);
 
 const RouteComponent = () => {
-  const isSignout = useSelector((state: any) => state.isSignout);
   return (
     <div>
       <Router>
