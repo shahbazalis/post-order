@@ -23,7 +23,7 @@ const LoginPage = () => {
     }));
   }, [formState.values]);
 
-  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // *event.persist(), which will remove the synthetic event from the pool and allow references to the event to be retained by user code.
     event.persist();
     // * set the variable value in values and touched status
