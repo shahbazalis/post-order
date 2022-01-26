@@ -70,7 +70,7 @@ const Posts = () => {
     postsDetails();
   }, [page]);
 
-  const handleNameSearch = async (
+  const handleNameSearch = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     // *event.persist(), which will remove the synthetic event from the pool and allow references to the event to be retained by user code.
@@ -78,7 +78,7 @@ const Posts = () => {
     setSearchInput(event.target.value);
   };
 
-  const handleMessageSearch = async (
+  const handleMessageSearch = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     // *event.persist(), which will remove the synthetic event from the pool and allow references to the event to be retained by user code.
