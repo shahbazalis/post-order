@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { getPosts } from "../api";
 import { PostInfo } from "../interfaces/PostInfo";
-import { SelectedPosts} from "../interfaces/SelectedPosts";
+import { SelectedPosts } from "../interfaces/SelectedPosts";
 import { SortedPosts } from "../interfaces/SortedPosts";
 import { PostDataMap } from "../interfaces/PostDataMap";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { removeStorageData, setStorageData } from "../utility/sessionStorage";
-import moment from "moment";
+import UserPosts from "./userPosts";
 
 const Posts = () => {
   const [posts, setPosts] = useState<SortedPosts[]>([]);
   const [senderName, setSenderName] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [msgSearchInput, setMsgSearchInput] = useState("");
-  const [selectUserPosts, setSelectUserPosts] = useState<
-  SelectedPosts[]
-  >([]);
+  const [selectUserPosts, setSelectUserPosts] = useState<SelectedPosts[]>([]);
   const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
 
@@ -25,9 +23,8 @@ const Posts = () => {
       setStorageData("page", page);
       const posts = await getPosts(page);
 
-      const sortedSenderList = posts.sort(
-        (a: PostInfo, b: PostInfo) =>
-          a.from_name.localeCompare(b.from_name)
+      const sortedSenderList = posts.sort((a: PostInfo, b: PostInfo) =>
+        a.from_name.localeCompare(b.from_name)
       );
 
       const occurrences = await sortedSenderList.reduce(
@@ -68,26 +65,19 @@ const Posts = () => {
     postsDetails();
   }, [page]);
 
-  const handleNameSearch = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleNameSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     // *event.persist(), which will remove the synthetic event from the pool and allow references to the event to be retained by user code.
     event.persist();
     setSearchInput(event.target.value);
   };
 
-  const handleMessageSearch = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleMessageSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     // *event.persist(), which will remove the synthetic event from the pool and allow references to the event to be retained by user code.
     event.persist();
     setMsgSearchInput(event.target.value);
   };
 
-  const handlePostList = (
-    posts: SelectedPosts[],
-    senderName: string
-  ) => {
+  const handlePostList = (posts: SelectedPosts[], senderName: string) => {
     setSelectUserPosts(posts);
     setSenderName(senderName);
   };
@@ -253,28 +243,12 @@ const Posts = () => {
             })}
         </ul>
       </div>
+
       <div>
-        <ul className="second-list">
-          {selectUserPosts
-            .filter((post: SelectedPosts) => {
-              if (msgSearchInput === "") return post;
-              else {
-                return post.message
-                  .toLowerCase()
-                  .includes(msgSearchInput.toLowerCase());
-              }
-            })
-            .map((post: SelectedPosts, index) => {
-              return (
-                <li className="list-item list_item_post_border" key={index}>
-                  {moment(post.created_time).format("MMMM Do YYYY, h:mm:ss a")}{" "}
-                  <ul>
-                    <li className="no-style-list-item">{post.message}</li>
-                  </ul>
-                </li>
-              );
-            })}
-        </ul>
+        <UserPosts
+          selectUserPosts={selectUserPosts}
+          msgSearchInput={msgSearchInput}
+        />
       </div>
     </div>
   );
