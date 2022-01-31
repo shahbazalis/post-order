@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { getPosts } from "../api";
-import {
-  PostInterface,
-  SelectedPostsInterface,
-  SortedPosts,
-  PostDataMap,
-} from "../utility/interface";
+import { PostInfo } from "../interfaces/PostInfo";
+import { SelectedPosts} from "../interfaces/SelectedPosts";
+import { SortedPosts } from "../interfaces/SortedPosts";
+import { PostDataMap } from "../interfaces/PostDataMap";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { removeStorageData, setStorageData } from "../utility/sessionStorage";
@@ -17,7 +15,7 @@ const Posts = () => {
   const [searchInput, setSearchInput] = useState("");
   const [msgSearchInput, setMsgSearchInput] = useState("");
   const [selectUserPosts, setSelectUserPosts] = useState<
-    SelectedPostsInterface[]
+  SelectedPosts[]
   >([]);
   const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
@@ -28,12 +26,12 @@ const Posts = () => {
       const posts = await getPosts(page);
 
       const sortedSenderList = posts.sort(
-        (a: PostInterface, b: PostInterface) =>
+        (a: PostInfo, b: PostInfo) =>
           a.from_name.localeCompare(b.from_name)
       );
 
       const occurrences = await sortedSenderList.reduce(
-        (acc: PostDataMap, post: PostInterface) => {
+        (acc: PostDataMap, post: PostInfo) => {
           if (post.from_id in acc) {
             acc[post.from_id].post.push({
               message: post.message,
@@ -87,7 +85,7 @@ const Posts = () => {
   };
 
   const handlePostList = (
-    posts: SelectedPostsInterface[],
+    posts: SelectedPosts[],
     senderName: string
   ) => {
     setSelectUserPosts(posts);
@@ -107,7 +105,7 @@ const Posts = () => {
 
   const handleRecentPosts = () => {
     const rececntPostsArr = [...selectUserPosts].sort(
-      (x: SelectedPostsInterface, y: SelectedPostsInterface) => {
+      (x: SelectedPosts, y: SelectedPosts) => {
         let postOne: Date = date(y.created_time);
         let postTwo: Date = date(x.created_time);
         let result = postOne.valueOf() - postTwo.valueOf();
@@ -120,7 +118,7 @@ const Posts = () => {
 
   const handleOldestPosts = () => {
     const oldPostsArr = [...selectUserPosts].sort(
-      (x: SelectedPostsInterface, y: SelectedPostsInterface) => {
+      (x: SelectedPosts, y: SelectedPosts) => {
         let postOne: Date = date(x.created_time);
         let postTwo: Date = date(y.created_time);
 
@@ -258,7 +256,7 @@ const Posts = () => {
       <div>
         <ul className="second-list">
           {selectUserPosts
-            .filter((post: SelectedPostsInterface) => {
+            .filter((post: SelectedPosts) => {
               if (msgSearchInput === "") return post;
               else {
                 return post.message
@@ -266,7 +264,7 @@ const Posts = () => {
                   .includes(msgSearchInput.toLowerCase());
               }
             })
-            .map((post: SelectedPostsInterface, index) => {
+            .map((post: SelectedPosts, index) => {
               return (
                 <li className="list-item list_item_post_border" key={index}>
                   {moment(post.created_time).format("MMMM Do YYYY, h:mm:ss a")}{" "}

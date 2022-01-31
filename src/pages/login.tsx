@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { login } from "../api";
-import { UserInfo, LooseObject } from "../utility/interface";
+import { LooseObject } from "../interfaces/LooseObject";
+import { UserInfo } from "../interfaces/UserInfo";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setStorageData, getStorageData } from "../utility/sessionStorage";
-import LoginButton from "./loginBtn";
+import LoginButton from "../components/loginBtn";
 import "./style.css";
 
 const emptyObject: LooseObject = {};
