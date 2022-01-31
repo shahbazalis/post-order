@@ -1,11 +1,12 @@
 import React from "react";
-interface ChckPostsProps {
+
+interface RecentPostsBtnProps {
   handleRecentPosts: () => void;
 }
 
-const RecentPostsBtn = (props: ChckPostsProps) => {
+const RecentPostsBtn = (props: RecentPostsBtnProps) => {
   return (
-    <div className="div1">
+    <div className="fleft">
       <button
         data-testid="sort-recent-msg"
         onClick={() => props.handleRecentPosts()}

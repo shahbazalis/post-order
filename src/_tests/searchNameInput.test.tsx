@@ -6,7 +6,7 @@ describe("Search Name Input Component", () => {
   it("rendered Input", async () => {
     const handleSearch = jest.fn();
     const { getByTestId } = render(
-      <SearchNameInput handleNameSearch={handleSearch} />
+      <SearchNameInput handleNameSearch={handleSearch} searchInput=""/>
     );
     const input = getByTestId("search-name");
     expect(input).toBeTruthy();
@@ -16,7 +16,7 @@ describe("Search Name Input Component", () => {
     act(() => {
       const handleSearch = jest.fn();
       const { getByTestId } = render(
-        <SearchNameInput handleNameSearch={handleSearch} />
+        <SearchNameInput handleNameSearch={handleSearch} searchInput=""/>
       );
       const input = getByTestId("search-name");
       const inputVal = "abc";

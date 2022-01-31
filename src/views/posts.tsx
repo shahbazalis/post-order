@@ -6,8 +6,14 @@ import { SortedPosts } from "../interfaces/SortedPosts";
 import { PostDataMap } from "../interfaces/PostDataMap";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-import { removeStorageData, setStorageData } from "../utility/sessionStorage";
+import { removeStorageData, setStorageData } from "../utils/sessionStorage";
 import UserPosts from "./userPosts";
+import PreviousBtn from "../components/previousBtn";
+import NextBtn from "../components/nextBtn";
+import RecentPostsBtn from "../components/recentPostsBtn";
+import OldPostsBtn from "../components/oldPostsBtn";
+import SearchNameInput from "../components/searchNameInput";
+import SearchMsgInput from "../components/searchMsgInput";
 
 const Posts = () => {
   const [posts, setPosts] = useState<SortedPosts[]>([]);
@@ -120,6 +126,14 @@ const Posts = () => {
     setSelectUserPosts(oldPostsArr);
   };
 
+  const handlePrvBtn = () => {
+    setPage(page - 1);
+  };
+
+  const handleNextBtn = () => {
+    setPage(page + 1);
+  };
+
   return (
     <div>
       <div>
@@ -133,78 +147,25 @@ const Posts = () => {
         </button>
       </div>
       <div className="grid-container">
+        <></>
         <div>
-          <input
-            data-testid="search-name"
-            className="search-input"
-            placeholder="Search"
-            type="text"
-            name="search"
-            value={searchInput || ""}
-            onChange={handleNameSearch}
+          <SearchNameInput
+            handleNameSearch={handleNameSearch}
+            searchInput={searchInput}
           />
         </div>
         <div>
-          {page === 1 ? (
-            <button
-              data-testid="prv-page-btn"
-              className=" ml15"
-              disabled={true}
-            >
-              Previous Page
-            </button>
-          ) : (
-            <button
-              data-testid="prv-page-btn"
-              className="ml15"
-              onClick={() => setPage(page - 1)}
-            >
-              Previous Page
-            </button>
-          )}
-          {page === 10 ? (
-            <button
-              data-testid="next-page-btn"
-              className="ml15 "
-              disabled={true}
-            >
-              Next Page
-            </button>
-          ) : (
-            <button
-              data-testid="next-page-btn"
-              className="ml15"
-              onClick={() => setPage(page + 1)}
-            >
-              Next Page
-            </button>
-          )}
+          <PreviousBtn handlePrvBtn={handlePrvBtn} page={page} />
+          <NextBtn handleNextBtn={handleNextBtn} page={page} />
         </div>
         <div>
-          <button
-            data-testid="sort-recent-msg"
-            onClick={() => handleRecentPosts()}
-            className="ml15"
-          >
-            Recent Posts
-          </button>
-          <button
-            data-testid="sort-old-msg"
-            onClick={() => handleOldestPosts()}
-            className="ml15"
-          >
-            Old Posts
-          </button>
+          <RecentPostsBtn handleRecentPosts={handleRecentPosts} />
+          <OldPostsBtn handleOldestPosts={handleOldestPosts} />
         </div>
         <div>
-          <input
-            data-testid="search-message"
-            type="text"
-            className="msg-search-input"
-            placeholder="Search"
-            name="search"
-            value={msgSearchInput || ""}
-            onChange={handleMessageSearch}
+          <SearchMsgInput
+            handleMessageSearch={handleMessageSearch}
+            msgSearchInput={msgSearchInput}
           />
         </div>
       </div>

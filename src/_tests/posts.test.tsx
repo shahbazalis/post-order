@@ -4,7 +4,7 @@ import {
   } from "@testing-library/react";
   import Enzyme from "enzyme";
   
-  import Posts from "../pages/posts";
+  import Posts from "../views/posts";
   
   import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
   

@@ -1,11 +1,11 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/login";
-import Posts from "./pages/posts";
+import LoginPage from "./views/login";
+import Posts from "./views/posts";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import AuthReducer from "./redux/reducer";
+import AuthReducer from "./store/reducer";
 
 const store = createStore(AuthReducer);
 

@@ -1,13 +1,12 @@
 import { UserInfo} from "../interfaces/UserInfo";
-import { getStorageData,setStorageData } from "../utility/sessionStorage";
-import instance from "../utility/axiosInstance";
-
-const url = "https://api.supermetrics.com/assignment";
+import { getStorageData,setStorageData } from "../utils/sessionStorage";
+import instance from "../utils/axiosInstance";
+import {clientId,url} from "../utils/constant"
 
 export const login = async (userInfo: UserInfo) => {
   try {
     const loginInfo = {
-      client_id: "ju16a6m81mhid5ue1z3v2g0uh",
+      client_id: clientId,
       name: userInfo.name,
       email: userInfo.email,
     };
@@ -22,7 +21,7 @@ export const login = async (userInfo: UserInfo) => {
 
 export const getPosts = async (page:number) => {
   try {
-    const accessToken = await getStorageData("accessToken");
+    const accessToken = getStorageData("accessToken");
     const posts = await instance.get(url + "/posts", {
         params: {
             sl_token: accessToken,

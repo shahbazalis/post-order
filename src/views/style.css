@@ -24,9 +24,9 @@
 }
 
 .list-item {
-  padding: 10px 10px 20px 25px;
+  padding: 10px 10px 20px 3px;
   background-color: #eeeeee;
-  border: 5px solid black;
+  border: 3px solid black;
   margin-bottom: 10px;
   list-style: none;
 }
@@ -77,14 +77,12 @@
   float: right;
   text-align: center;
 }
-.active-list-item{
+.active-list-item {
   background-color: darkgray;
-
 }
 
-.list_item_post_border{
+.list_item_post_border {
   border: 5px solid darkgray;
-
 }
 .flex-container {
   display: flex;
@@ -95,4 +93,10 @@
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 20px;
 }
-.ml15{    margin-right: 15px;}
+.ml15 {
+  margin-right: 15px;
+}
+
+.fleft {
+  float: left;
+}

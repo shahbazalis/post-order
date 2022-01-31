@@ -1,7 +1,8 @@
 import React from 'react';
 
 interface SearchInputProps {
-    handleNameSearch: () => void;
+    handleNameSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    searchInput : string;
   }
   
   const SearchNameInput = (props:SearchInputProps) => {
@@ -13,7 +14,7 @@ interface SearchInputProps {
           placeholder="Search"
           type="text"
           name="search"
-          value=""
+          value={props.searchInput || ""}
           onChange={props.handleNameSearch}
         />
       </div>
