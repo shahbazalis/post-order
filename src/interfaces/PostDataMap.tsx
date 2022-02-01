@@ -1,10 +1,4 @@
-interface PostInfo {
-  created_time: string;
-  id: string;
-  from_name: string;
-  from_id: string;
-  message: string;
-}
+import { PostInfo } from "./PostInfo";
 
 export type PostObject = Pick<PostInfo, "message" | "created_time">;
 
