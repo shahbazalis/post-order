@@ -11,14 +11,14 @@ const store = createStore(AuthReducer);
 
 const RouteComponent = () => {
   return (
-    <div>
+    <>
       <Router>
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/posts" element={<Posts />} />
         </Routes>
       </Router>
-    </div>
+    </>
   );
 };
 

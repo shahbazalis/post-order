@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import "./style.css";
+import { useNavigate } from "react-router-dom";
+
 import { getPosts } from "../api";
 import { PostInfo } from "../interfaces/PostInfo";
 import { SelectedPosts } from "../interfaces/SelectedPosts";
 import { SortedPosts } from "../interfaces/SortedPosts";
 import { PostDataMap } from "../interfaces/PostDataMap";
-import "./style.css";
-import { useNavigate } from "react-router-dom";
+
 import { removeStorageData, setStorageData } from "../utils/sessionStorage";
 import UserPosts from "./userPosts";
 import PreviousBtn from "../components/previousBtn";
@@ -14,6 +16,7 @@ import RecentPostsBtn from "../components/recentPostsBtn";
 import OldPostsBtn from "../components/oldPostsBtn";
 import SearchNameInput from "../components/searchNameInput";
 import SearchMsgInput from "../components/searchMsgInput";
+import Spinner from "./spinner";
 
 const Posts = () => {
   const [posts, setPosts] = useState<SortedPosts[]>([]);
@@ -22,13 +25,16 @@ const Posts = () => {
   const [msgSearchInput, setMsgSearchInput] = useState("");
   const [selectUserPosts, setSelectUserPosts] = useState<SelectedPosts[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const postsDetails = async () => {
     try {
+      setLoading(true);
       setStorageData("page", page);
       const posts = await getPosts(page);
-
+      setLoading(false);
       const sortedSenderList = posts.sort((a: PostInfo, b: PostInfo) =>
         a.from_name.localeCompare(b.from_name)
       );
@@ -64,6 +70,7 @@ const Posts = () => {
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -136,6 +143,7 @@ const Posts = () => {
 
   return (
     <div>
+       {loading && <Spinner />}
       <div>
         <h1 className="heading-1">Post List</h1>
         <button
