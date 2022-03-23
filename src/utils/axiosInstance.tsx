@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getStorageData } from "./sessionStorage";
-import { login, getPosts } from "../api/index";
+import { login, getPosts } from "../api/userPostApis";
 
 const instance = axios.create({
   baseURL: "https://api.supermetrics.com/assignment/",

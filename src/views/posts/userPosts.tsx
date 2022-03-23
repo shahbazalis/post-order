@@ -1,6 +1,6 @@
 import React from "react";
-import { SelectedPosts } from "../interfaces/SelectedPosts";
-import "./style.css";
+import { SelectedPosts } from "../../interfaces/SelectedPosts";
+import "../style.css";
 import moment from "moment";
 
 interface UserPostsProps {
@@ -9,18 +9,20 @@ interface UserPostsProps {
 }
 
 const UserPosts = (props: UserPostsProps) => {
+  const filterMessage = (post: SelectedPosts) => {
+    if (props.msgSearchInput === "") return post;
+    else {
+      return post.message
+        .toLowerCase()
+        .includes(props.msgSearchInput.toLowerCase());
+    }
+  };
+
   return (
     <div>
       <ul className="second-list">
         {props.selectUserPosts
-          .filter((post: SelectedPosts) => {
-            if (props.msgSearchInput === "") return post;
-            else {
-              return post.message
-                .toLowerCase()
-                .includes(props.msgSearchInput.toLowerCase());
-            }
-          })
+          .filter((post: SelectedPosts) => filterMessage(post))
           .map((post: SelectedPosts, index) => {
             return (
               <li className="list-item list_item_post_border" key={index}>

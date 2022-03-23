@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
-import "./style.css";
+import "../style.css";
 import { useNavigate } from "react-router-dom";
 
-import { getPosts } from "../api";
-import { PostInfo } from "../interfaces/PostInfo";
-import { SelectedPosts } from "../interfaces/SelectedPosts";
-import { SortedPosts } from "../interfaces/SortedPosts";
-import { PostDataMap } from "../interfaces/PostDataMap";
+import { getPosts } from "../../api/userPostApis";
+import { PostInfo } from "../../interfaces/PostInfo";
+import { SelectedPosts } from "../../interfaces/SelectedPosts";
+import { SortedPosts } from "../../interfaces/SortedPosts";
+import { PostDataMap } from "../../interfaces/PostDataMap";
 
-import { removeStorageData, setStorageData } from "../utils/sessionStorage";
+import { removeStorageData, setStorageData } from "../../utils/sessionStorage";
 import UserPosts from "./userPosts";
-import PreviousBtn from "../components/previousBtn";
-import NextBtn from "../components/nextBtn";
-import RecentPostsBtn from "../components/recentPostsBtn";
-import OldPostsBtn from "../components/oldPostsBtn";
-import SearchNameInput from "../components/searchNameInput";
-import SearchMsgInput from "../components/searchMsgInput";
-import Spinner from "./spinner";
+import PreviousBtn from "../../components/previousBtn";
+import NextBtn from "../../components/nextBtn";
+import RecentPostsBtn from "../../components/recentPostsBtn";
+import OldPostsBtn from "../../components/oldPostsBtn";
+import SearchNameInput from "../../components/searchNameInput";
+import SearchMsgInput from "../../components/searchMsgInput";
+import Spinner from "../spinner";
 
 const Posts = () => {
   const [posts, setPosts] = useState<SortedPosts[]>([]);
@@ -141,9 +141,16 @@ const Posts = () => {
     setPage(page + 1);
   };
 
+  const filterName = (post: SortedPosts) => {
+    if (searchInput === "") return post.from_name;
+    else {
+      return post.from_name.toLowerCase().includes(searchInput.toLowerCase());
+    }
+  };
+
   return (
     <div>
-       {loading && <Spinner />}
+      {loading && <Spinner />}
       <div>
         <h1 className="heading-1">Post List</h1>
         <button
@@ -177,18 +184,10 @@ const Posts = () => {
           />
         </div>
       </div>
-
       <div>
         <ul className="first-list">
           {posts
-            .filter((post: SortedPosts) => {
-              if (searchInput === "") return post.from_name;
-              else {
-                return post.from_name
-                  .toLowerCase()
-                  .includes(searchInput.toLowerCase());
-              }
-            })
+            .filter((post: SortedPosts) => filterName(post))
             .map((post: SortedPosts) => {
               return senderName === post.from_name ? (
                 <li

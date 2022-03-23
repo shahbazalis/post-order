@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { login } from "../api";
-import { LooseObject } from "../interfaces/LooseObject";
-import { UserInfo } from "../interfaces/UserInfo";
+import { login } from "../../api/userPostApis";
+import { LooseObject } from "../../interfaces/LooseObject";
+import { UserInfo } from "../../interfaces/UserInfo";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setStorageData, getStorageData } from "../utils/sessionStorage";
-import LoginButton from "../components/loginBtn";
-import "./style.css";
+import { setStorageData, getStorageData } from "../../utils/sessionStorage";
+import LoginButton from "../../components/loginBtn";
+import "../style.css";
 
 const emptyObject: LooseObject = {};
 

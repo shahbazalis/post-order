@@ -1,7 +1,7 @@
 import React from "react";
 import { render, RenderResult, } from "@testing-library/react";
 import Enzyme from "enzyme";
-import LoginPage from "../views/login";
+import LoginPage from "../views/login/login";
 
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 const { createMemoryHistory } = require("history");

@@ -1,7 +1,7 @@
 import { UserInfo} from "../interfaces/UserInfo";
 import { getStorageData,setStorageData } from "../utils/sessionStorage";
 import instance from "../utils/axiosInstance";
-import {clientId,url} from "../utils/constant"
+import {clientId,url} from "../constant/constant"
 
 export const login = async (userInfo: UserInfo) => {
   try {
