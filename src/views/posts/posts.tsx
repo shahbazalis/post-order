@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "../style.css";
 import { useNavigate } from "react-router-dom";
 
@@ -20,7 +20,7 @@ import Spinner from "../spinner";
 
 const Posts = () => {
   const [posts, setPosts] = useState<SortedPosts[]>([]);
-  const [senderName, setSenderName] = useState("");
+  const [senderId, setSenderId] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [msgSearchInput, setMsgSearchInput] = useState("");
   const [selectUserPosts, setSelectUserPosts] = useState<SelectedPosts[]>([]);
@@ -29,7 +29,7 @@ const Posts = () => {
 
   const navigate = useNavigate();
 
-  const postsDetails = async () => {
+  const postsDetails = useCallback(async () => {
     try {
       setLoading(true);
       setStorageData("page", page);
@@ -48,6 +48,7 @@ const Posts = () => {
             });
           } else {
             acc[post.from_id] = {
+              from_id: post.from_id,
               from_name: post.from_name,
               post: [
                 { message: post.message, created_time: post.created_time },
@@ -66,17 +67,17 @@ const Posts = () => {
 
       if (occurencesArr.length) {
         setSelectUserPosts(occurencesArr[0].post);
-        setSenderName(occurencesArr[0].from_name);
+        setSenderId(occurencesArr[0].from_id);
       }
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
-  };
+  }, [page]);
 
   useEffect(() => {
     postsDetails();
-  }, [page]);
+  }, [page, postsDetails]);
 
   const handleNameSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     // *event.persist(), which will remove the synthetic event from the pool and allow references to the event to be retained by user code.
@@ -90,9 +91,9 @@ const Posts = () => {
     setMsgSearchInput(event.target.value);
   };
 
-  const handlePostList = (posts: SelectedPosts[], senderName: string) => {
+  const handlePostList = (posts: SelectedPosts[], senderId: string) => {
     setSelectUserPosts(posts);
-    setSenderName(senderName);
+    setSenderId(senderId);
   };
 
   const handleLogOut = () => {
@@ -189,11 +190,11 @@ const Posts = () => {
           {posts
             .filter((post: SortedPosts) => filterName(post))
             .map((post: SortedPosts) => {
-              return senderName === post.from_name ? (
+              return senderId === post.from_id ? (
                 <li
                   className="list-item active-list-item"
-                  key={post.from_name}
-                  onClick={() => handlePostList(post.post, post.from_name)}
+                  key={post.from_id}
+                  onClick={() => handlePostList(post.post, post.from_id)}
                 >
                   {post.from_name}{" "}
                   <span className="avatar">{post.post.length}</span>
@@ -202,7 +203,7 @@ const Posts = () => {
                 <li
                   className="list-item"
                   key={post.from_name}
-                  onClick={() => handlePostList(post.post, post.from_name)}
+                  onClick={() => handlePostList(post.post, post.from_id)}
                 >
                   {post.from_name}{" "}
                   <span className="avatar">{post.post.length}</span>
